@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/MembersFragment">
+
+    <fragment
+        android:id="@+id/MembersFragment"
+        android:name="com.example.splitthebill.ui.fragment.MembersFragment"
+        android:label="@string/members_fragment_label"
+        tools:layout="@layout/fragment_members">
+
+        <action
+            android:id="@+id/action_MembersFragment_to_ItemsFragment"
+            app:destination="@id/ItemsFragment">
+        </action>
+
+
+
+        <action
+            android:id="@+id/action_MembersFragment_to_AddMemberFragment"
+            app:destination="@id/AddMemberFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ItemsFragment"
+        android:name="com.example.splitthebill.ui.fragment.ItemsFragment"
+        android:label="@string/items_fragment_label"
+        tools:layout="@layout/fragment_items">
+
+        <action
+            android:id="@+id/action_ItemsFragment_to_MembersFragment"
+            app:destination="@id/MembersFragment" />
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <!-- Botão de voltar -->
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@android:drawable/ic_menu_revert" />
+        </com.google.android.material.appbar.MaterialToolbar>
+    </fragment>
+    <fragment
+        android:id="@+id/AddMemberFragment"
+        android:name="com.example.splitthebill.ui.fragment.AddMemberFragment"
+        android:label="@string/add_member_label"
+        tools:layout="@layout/fragment_add_member">
+
+        <action
+            android:id="@+id/action_AddMemberFragment_to_MembersFragment"
+            app:destination="@id/MembersFragment" />
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            android:elevation="4dp"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <!-- Botão de voltar -->
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                app:srcCompat="@android:drawable/ic_menu_revert" />
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </fragment>
+</navigation>

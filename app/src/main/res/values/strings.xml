@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">SplitTheBill</string>
+    <string name="action_calculate">Calcular</string>
+    <string name="action_clean_data">Limpar dados</string>
+
+    <!-- Strings used for fragments for navigation -->
+    <string name="members_fragment_label">SplitTheBill</string>
+    <string name="items_fragment_label">Itens</string>
+    <string name="add_member_label">Adicionar integrante</string>
+
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <!-- Strings used for TextView -->
+    <string name="members_tv">Integrantes</string>
+    <string name="items_tv">Itens</string>
+    <string name="add_member_tv">Adicionar integrante</string>
+    <string name="name_tv">Nome</string>
+    <string name="has_item_tv">Comprou algo?</string>
+    <string name="item_description_tv">Descrição</string>
+    <string name="item_value_tv">Valor</string>
+
+    <!-- Strings used for EditText hint -->
+    <string name="name_hint">Digite seu nome</string>
+    <string name="item_description_hint">Digite a descrição do item</string>
+    <string name="item_value_hint">Digite o valor do item</string>
+
+    <!-- Strings formatted -->
+    <string name="formatted_value">R$ %.2f</string>
+    <string name="formatted_item_header">Item de %s</string>
+</resources>
