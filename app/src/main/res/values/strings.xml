@@ -31,6 +31,5 @@
 
 
     <!-- Buttons names -->
-    <string name="cancel_button">Cancelar</string>
     <string name="save_button">Salvar</string>
 </resources>
