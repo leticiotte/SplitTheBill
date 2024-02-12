@@ -51,9 +51,9 @@
     </fragment>
     <fragment
         android:id="@+id/AddMemberFragment"
-        android:name="com.example.splitthebill.ui.fragment.AddMemberFragment"
+        android:name="com.example.splitthebill.ui.fragment.MemberFormFragment"
         android:label="@string/add_member_label"
-        tools:layout="@layout/fragment_add_member">
+        tools:layout="@layout/fragment_member_form">
 
         <action
             android:id="@+id/action_AddMemberFragment_to_MembersFragment"

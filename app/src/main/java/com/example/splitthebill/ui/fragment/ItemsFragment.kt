@@ -21,9 +21,13 @@ import com.example.splitthebill.domain.model.Item
 import com.example.splitthebill.domain.model.Member
 import com.example.splitthebill.domain.model.interfaces.ItemsObserver
 import com.example.splitthebill.domain.model.interfaces.OnItemClickListener
+import com.example.splitthebill.domain.repository.MemberRepository
+import com.example.splitthebill.infrastructure.repository.MemberRepositoryImpl
 import com.example.splitthebill.ui.adapter.ItemAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import org.koin.android.ext.android.get
+import org.koin.android.ext.android.inject
 
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
@@ -41,6 +45,7 @@ class ItemsFragment : Fragment(), ItemsObserver, OnItemClickListener {
     private lateinit var member: Member
     private var items: MutableList<Item> = mutableListOf()
     private lateinit var itemAdapter: ItemAdapter
+    private val memberRepository: MemberRepository = get()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -70,18 +75,17 @@ class ItemsFragment : Fragment(), ItemsObserver, OnItemClickListener {
         }
     }
 
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
     private fun setupItemsList() {
-        itemsRv = binding.itemsRv
-        itemsRv.layoutManager = LinearLayoutManager(this.context)
-
         itemAdapter = ItemAdapter(requireContext().applicationContext, items, this)
         itemAdapter.registerObserver(this)
+
+        itemsRv = binding.itemsRv
+        itemsRv.layoutManager = LinearLayoutManager(this.context)
         itemsRv.adapter = itemAdapter
     }
 
@@ -89,6 +93,7 @@ class ItemsFragment : Fragment(), ItemsObserver, OnItemClickListener {
         itemAdapter.setItems(updatedItems)
         if (updatedItems.isNotEmpty()) itemsFab.hide()
         else itemsFab.show()
+        itemsRv.adapter?.notifyDataSetChanged()
     }
 
     override fun onItemClick(position: Int) {
@@ -100,9 +105,7 @@ class ItemsFragment : Fragment(), ItemsObserver, OnItemClickListener {
         alertDialogBuilder.setTitle("Deletar")
         alertDialogBuilder.setMessage("Deseja deletar o item ${items[position].description}?")
         alertDialogBuilder.setPositiveButton("Sim") { _, _ ->
-            items.removeAt(position)
-            itemsRv.adapter?.notifyDataSetChanged()
-            onItemsChanged(items)
+            removeMemberItem(position)
             Snackbar.make(binding.root, "Item deletado com sucesso", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
@@ -110,5 +113,12 @@ class ItemsFragment : Fragment(), ItemsObserver, OnItemClickListener {
             dialog.dismiss()
         }
         alertDialogBuilder.create().show()
+    }
+
+    private fun removeMemberItem(itemIndex: Int){
+        memberRepository.removeMemberItemByIndex(member.index!!, itemIndex)
+        member = memberRepository.getMemberByIndex(member.index!!)
+        items = member.items
+        onItemsChanged(items)
     }
 }

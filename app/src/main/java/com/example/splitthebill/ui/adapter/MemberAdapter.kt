@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitthebill.R
+import com.example.splitthebill.domain.model.Item
 import com.example.splitthebill.domain.model.Member
 import com.example.splitthebill.domain.model.interfaces.MembersObserver
 import com.example.splitthebill.domain.model.interfaces.OnItemClickListener
@@ -35,6 +36,14 @@ class MemberAdapter(private val context: Context, private var members: List<Memb
     private fun notifyObservers() {
         for (observer in observers) {
             observer.onMembersChanged(members)
+        }
+    }
+
+    fun setMembers(newItems: List<Member>) {
+        if (members != newItems) {
+            members = newItems
+            notifyDataSetChanged()
+            notifyObservers()
         }
     }
 }

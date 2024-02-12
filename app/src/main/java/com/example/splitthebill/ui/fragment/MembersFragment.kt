@@ -14,20 +14,25 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitthebill.R
 import com.example.splitthebill.databinding.FragmentMembersBinding
-import com.example.splitthebill.domain.model.Item
 import com.example.splitthebill.domain.model.Member
 import com.example.splitthebill.domain.model.interfaces.MembersObserver
 import com.example.splitthebill.domain.model.interfaces.OnItemClickListener
+import com.example.splitthebill.domain.repository.MemberRepository
+import com.example.splitthebill.ui.adapter.ItemAdapter
 import com.example.splitthebill.ui.adapter.MemberAdapter
 import com.google.android.material.snackbar.Snackbar
+import org.koin.android.ext.android.get
 
 class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
 
     private var _binding: FragmentMembersBinding? = null
-    private lateinit var membersRecyclerView: RecyclerView
     private val binding get() = _binding!!
+    private lateinit var membersRv: RecyclerView
+    private lateinit var memberAdapter: MemberAdapter
 
-    private lateinit var members: MutableList<Member>;
+
+    private lateinit var members: MutableList<Member>
+    private val memberRepository: MemberRepository = get()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -42,6 +47,11 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
 
         setHasOptionsMenu(true)
         return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        members = memberRepository.getAllMembers()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
@@ -69,34 +79,14 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
     }
 
     private fun setupMembersList() {
-        members = mutableListOf(
-            Member("John Doe", 50.0, mutableListOf(Item("Coca cola", 12.0))),
-            Member("Jane Smith", 40.0, mutableListOf()),
-            Member("Bob Johnson", 60.0, mutableListOf()),
-            Member("John Doe", 50.0, mutableListOf()),
-            Member("Jane Smith", 40.0, mutableListOf()),
-            Member("Bob Johnson", 60.0, mutableListOf()),
-            Member("John Doe", 50.0, mutableListOf()),
-            Member("Jane Smith", 40.0, mutableListOf()),
-            Member("Bob Johnson", 60.0, mutableListOf()),
-            Member("John Doe", 50.0, mutableListOf()),
-            Member("Jane Smith", 40.0, mutableListOf()),
-            Member("Bob Johnson", 60.0, mutableListOf()),
-            Member("John Doe", 50.0, mutableListOf()),
-            Member("Jane Smith", 40.0, mutableListOf()),
-            Member("Bob Johnson", 60.0, mutableListOf()),
-            Member("John Doe", 50.0, mutableListOf()),
-            Member("Jane Smith", 40.0, mutableListOf()),
-            Member("Bob Johnson", 60.0, mutableListOf()),
-        )
+        members = memberRepository.getAllMembers()
 
+        memberAdapter = MemberAdapter(requireContext().applicationContext, members, this)
+        memberAdapter.registerObserver(this)
 
-
-        membersRecyclerView = binding.membersRecyclerView
-        membersRecyclerView.layoutManager = LinearLayoutManager(this.context)
-        val adapter = MemberAdapter(requireContext().applicationContext, members, this)
-        adapter.registerObserver(this)
-        membersRecyclerView.adapter = adapter
+        membersRv = binding.membersRecyclerView
+        membersRv.layoutManager = LinearLayoutManager(this.context)
+        membersRv.adapter = memberAdapter
     }
 
     private fun splitValueCalculator() {
@@ -125,26 +115,15 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
     }
 
     private fun resetEntries() {
-        members.clear()
-        membersRecyclerView.adapter?.notifyDataSetChanged()
+        memberRepository.clearAllMembers()
+        onMembersChanged(memberRepository.getAllMembers())
+        membersRv.adapter?.notifyDataSetChanged()
     }
 
 
     override fun onMembersChanged(updatedMembers: List<Member>) {
-        members.clear()
-        members.addAll(updatedMembers)
-        membersRecyclerView.adapter?.notifyDataSetChanged()
-    }
-
-    private fun addMember(member: Member) {
-        members.add(member)
-        membersRecyclerView.adapter?.notifyItemInserted(members.size - 1)
-    }
-
-
-    private fun removeMember(position: Int) {
-        members.removeAt(position)
-        membersRecyclerView.adapter?.notifyItemRemoved(position)
+        memberAdapter.setMembers(updatedMembers)
+        membersRv.adapter?.notifyDataSetChanged()
     }
 
     override fun onItemClick(position: Int) {
@@ -154,7 +133,22 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
     }
 
     override fun onItemLongPress(position: Int) {
-        TODO("Not yet implemented")
+        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+        alertDialogBuilder.setTitle("Deletar")
+        alertDialogBuilder.setMessage("Deseja deletar o membro ${members[position].name}?")
+        alertDialogBuilder.setPositiveButton("Sim") { _, _ ->
+            removeMember(position)
+            Snackbar.make(binding.root, "Membro deletado com sucesso", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show()
+        }
+        alertDialogBuilder.setNegativeButton("Cancelar") { dialog, _ ->
+            dialog.dismiss()
+        }
+        alertDialogBuilder.create().show()
     }
 
+    private fun removeMember(index: Int){
+        memberRepository.removeMemberByIndex(index)
+        onMembersChanged(memberRepository.getAllMembers())
+    }
 }

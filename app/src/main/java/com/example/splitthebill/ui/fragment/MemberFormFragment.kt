@@ -2,7 +2,6 @@ package com.example.splitthebill.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
@@ -10,10 +9,10 @@ import android.widget.EditText
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.splitthebill.R
-import com.example.splitthebill.databinding.FragmentAddMemberBinding
+import com.example.splitthebill.databinding.FragmentMemberFormBinding
 
-class AddMemberFragment : Fragment() {
-    private var _binding: FragmentAddMemberBinding? = null
+class MemberFormFragment : Fragment() {
+    private var _binding: FragmentMemberFormBinding? = null
     private val binding get() = _binding!!
 
     private lateinit var addMemberHasItemCb: CheckBox
@@ -24,7 +23,7 @@ class AddMemberFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentAddMemberBinding.inflate(inflater, container, false)
+        _binding = FragmentMemberFormBinding.inflate(inflater, container, false)
 
         setupHasItemCb()
         return binding.root
