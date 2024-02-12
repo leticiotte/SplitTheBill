@@ -2,4 +2,10 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="cancel_button_background">#D32F2F</color>
+    <color name="cancel_button_text">#FFCDD2</color>
+
+    <color name="save_button_background">#2E7D32</color>
+    <color name="save_button_text">#A5D6A7</color>
 </resources>

@@ -28,4 +28,9 @@
     <!-- Strings formatted -->
     <string name="formatted_value">R$ %.2f</string>
     <string name="formatted_item_header">Item de %s</string>
+
+
+    <!-- Buttons names -->
+    <string name="cancel_button">Cancelar</string>
+    <string name="save_button">Salvar</string>
 </resources>
