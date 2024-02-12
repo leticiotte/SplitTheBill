@@ -117,7 +117,7 @@
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/buttonLayout"
+        android:id="@+id/buttonsLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -128,7 +128,7 @@
         android:weightSum="2">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/cancelButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -137,7 +137,7 @@
             android:text="@string/cancel_button" />
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/saveButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
