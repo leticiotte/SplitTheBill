@@ -3,6 +3,7 @@
     <item android:drawable="@android:color/white" />
     <item android:alpha="0.5">
         <shape android:shape="rectangle">
+            <corners android:radius="8dp" /> <!-- Ajuste o valor do raio conforme necessário -->
             <solid android:color="#CCCCCC" />
         </shape>
     </item>
