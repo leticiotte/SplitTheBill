@@ -1,6 +1,7 @@
 package com.example.splitthebill.ui.fragment
 
 import android.os.Bundle
+import android.view.ContextMenu
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,6 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -133,18 +135,44 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
     }
 
     override fun onItemLongPress(position: Int) {
-        val alertDialogBuilder = AlertDialog.Builder(requireContext())
-        alertDialogBuilder.setTitle("Deletar")
-        alertDialogBuilder.setMessage("Deseja deletar o membro ${members[position].name}?")
-        alertDialogBuilder.setPositiveButton("Sim") { _, _ ->
-            removeMember(position)
-            Snackbar.make(binding.root, "Membro deletado com sucesso", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        val itemView = membersRv.findViewHolderForAdapterPosition(position)?.itemView
+        if (itemView != null) {
+            val popupMenu = PopupMenu(requireContext(), itemView)
+            popupMenu.menuInflater.inflate(R.menu.menu_member_options, popupMenu.menu)
+
+            popupMenu.setOnMenuItemClickListener { menuItem ->
+                when (menuItem.itemId) {
+                    R.id.action_edit -> {
+                        val bundle = Bundle()
+                        bundle.putSerializable("member", members[position])
+                        findNavController().navigate(R.id.action_MembersFragment_to_AddMemberFragment, bundle)
+                        true
+                    }
+                    R.id.action_delete -> {
+                        val alertDialogBuilder = AlertDialog.Builder(requireContext())
+                        alertDialogBuilder.setTitle("Deletar")
+                        alertDialogBuilder.setMessage("Deseja deletar o membro ${members[position].name}?")
+                        alertDialogBuilder.setPositiveButton("Sim") { _, _ ->
+                            removeMember(position)
+                            Snackbar.make(
+                                binding.root,
+                                "Membro deletado com sucesso",
+                                Snackbar.LENGTH_LONG
+                            )
+                                .setAction("Action", null).show()
+                        }
+                        alertDialogBuilder.setNegativeButton("Cancelar") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        alertDialogBuilder.create().show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+
+            popupMenu.show()
         }
-        alertDialogBuilder.setNegativeButton("Cancelar") { dialog, _ ->
-            dialog.dismiss()
-        }
-        alertDialogBuilder.create().show()
     }
 
     private fun removeMember(index: Int){

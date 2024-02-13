@@ -1,6 +1,7 @@
 package com.example.splitthebill.ui.fragment
 
 import android.os.Bundle
+import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,6 +31,9 @@ class MemberFormFragment : Fragment() {
 
     private val memberRepository: MemberRepository = get()
 
+    private lateinit var member: Member
+    private var isEdit: Boolean = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -40,6 +44,31 @@ class MemberFormFragment : Fragment() {
         setupHasItemCb()
         setupSaveBtnOnClickListener()
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        arguments?.let {
+            member = it.getSerializable("member") as Member
+            if (member != null) {
+                isEdit = true
+                addMemberNameEt.text = Editable.Factory.getInstance().newEditable(member.name)
+                if (member.items.size != 0) {
+                    addMemberHasItemCb.isChecked = true
+
+                    addMemberItemDescriptionEt.isEnabled = true
+                    addMemberItemDescriptionEt.background = null
+                    addMemberItemDescriptionEt.text =
+                        Editable.Factory.getInstance().newEditable(member.items[0].description)
+
+                    addMemberItemValueEt.isEnabled = true
+                    addMemberItemValueEt.background = null
+                    addMemberItemValueEt.text =
+                        Editable.Factory.getInstance().newEditable(member.items[0].value.toString())
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
@@ -88,7 +117,11 @@ class MemberFormFragment : Fragment() {
                     .setAction("Action", null).show()
                 return@setOnClickListener
             }
-            createMemberWithFormValues()
+            if (isEdit) {
+                editMemberWithFormValues()
+            } else {
+                createMemberWithFormValues()
+            }
         }
     }
 
@@ -102,18 +135,47 @@ class MemberFormFragment : Fragment() {
     }
 
     private fun createMemberWithFormValues() {
-        var member = Member()
-        member.name = addMemberNameEt.text.toString()
+        var newMember = Member()
+        newMember.name = addMemberNameEt.text.toString()
         if (addMemberHasItemCb.isChecked) {
             var item = Item(
                 0,
                 addMemberItemDescriptionEt.text.toString(),
                 addMemberItemValueEt.text.toString().toDouble()
             )
-            member.items.add(item)
-            member.amountPaid = item.value
+            newMember.items.add(item)
+            newMember.amountPaid = item.value
         }
-        memberRepository.addMember(member)
+        memberRepository.addMember(newMember)
+        Snackbar.make(
+            binding.root,
+            "Membro salvo com sucesso",
+            Snackbar.LENGTH_LONG
+        )
+            .setAction("Action", null).show()
+        findNavController().navigate(R.id.action_AddMemberFragment_to_MembersFragment)
+    }
+
+    private fun editMemberWithFormValues() {
+        var newMember = Member()
+        newMember.index = member.index
+        newMember.name = addMemberNameEt.text.toString()
+        if (addMemberHasItemCb.isChecked) {
+            var item = Item(
+                0,
+                addMemberItemDescriptionEt.text.toString(),
+                addMemberItemValueEt.text.toString().toDouble()
+            )
+            newMember.items.add(item)
+            newMember.amountPaid = item.value
+        }
+        memberRepository.editMember(newMember)
+        Snackbar.make(
+            binding.root,
+            "Membro editado com sucesso",
+            Snackbar.LENGTH_LONG
+        )
+            .setAction("Action", null).show()
         findNavController().navigate(R.id.action_AddMemberFragment_to_MembersFragment)
     }
 }

@@ -6,6 +6,7 @@ import com.example.splitthebill.domain.model.Member
 interface MemberRepository {
     fun getAllMembers(): MutableList<Member>
     fun addMember(member: Member)
+    fun editMember(member: Member)
     fun removeMemberByIndex(index: Int)
     fun getMemberByIndex(index: Int): Member
     fun clearAllMembers()

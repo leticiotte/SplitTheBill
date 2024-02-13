@@ -39,7 +39,6 @@ class ItemsFragment : Fragment(), ItemsObserver, OnItemClickListener {
     private lateinit var itemsTitleTv: TextView
     private lateinit var itemsRv: RecyclerView
     private lateinit var itemsFab: FloatingActionButton
-    private var actionMode: ActionMode? = null
 
 
     private lateinit var member: Member

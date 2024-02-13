@@ -22,6 +22,10 @@ class MemberRepositoryImpl : MemberRepository {
         members.add(member)
     }
 
+    override fun editMember(member: Member) {
+        members[member.index!!] = member
+    }
+
     override fun removeMemberByIndex(index: Int) {
         members.removeAt(index)
     }
