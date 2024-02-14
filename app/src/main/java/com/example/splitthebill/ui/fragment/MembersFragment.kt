@@ -16,12 +16,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.splitthebill.R
 import com.example.splitthebill.databinding.FragmentMembersBinding
 import com.example.splitthebill.domain.model.Member
+import com.example.splitthebill.domain.model.SplitBillInfos
 import com.example.splitthebill.domain.model.interfaces.MembersObserver
 import com.example.splitthebill.domain.model.interfaces.OnItemClickListener
 import com.example.splitthebill.domain.repository.MemberRepository
 import com.example.splitthebill.ui.adapter.MemberAdapter
 import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import org.koin.android.ext.android.get
+import kotlin.math.absoluteValue
 
 class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
 
@@ -30,7 +33,7 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
     private lateinit var membersRv: RecyclerView
     private lateinit var memberAdapter: MemberAdapter
 
-    private lateinit var members: MutableList<Member>
+    private var members: MutableList<Member> = mutableListOf()
     private val memberRepository: MemberRepository = get()
 
     override fun onCreateView(
@@ -61,13 +64,15 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_calculator -> {
-                splitValueCalculator()
+                splitBillCalculator()
                 return true
             }
+
             R.id.action_clean_data -> {
                 showCleanDataConfirmationDialog()
                 return true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -88,9 +93,37 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
         membersRv.adapter = memberAdapter
     }
 
-    private fun splitValueCalculator() {
-        Snackbar.make(binding.root, "Calcular", Snackbar.LENGTH_LONG)
-            .setAction("Action", null).show()
+    private fun splitBillCalculator() {
+        var splitBillResultList: MutableList<SplitBillInfos> = mutableListOf()
+
+        val totalBillValue = members.sumOf { it.amountPaid }
+        val billValuePerMember = totalBillValue / members.size
+
+        for (member in members) {
+            val valueDifference = member.amountPaid - billValuePerMember
+            val hasToPay = valueDifference < 0.0
+            val absoluteValue = valueDifference.absoluteValue
+
+            val splitBillInfo = SplitBillInfos(
+                index = member.index,
+                name = member.name,
+                hasToPay = hasToPay,
+                value = absoluteValue
+            )
+
+            splitBillResultList.add(splitBillInfo)
+        }
+
+        navigateToSplitBillFragment(splitBillResultList)
+    }
+
+    private fun navigateToSplitBillFragment(splitBillResultList: List<SplitBillInfos>) {
+        val json = Gson().toJson(splitBillResultList)
+
+        val bundle = Bundle().apply {
+            putString("splitBillResultList", json)
+        }
+        findNavController().navigate(R.id.action_MembersFragment_SplitBillFragment, bundle)
     }
 
     private fun showCleanDataConfirmationDialog() {
@@ -142,9 +175,13 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
                     R.id.action_edit -> {
                         val bundle = Bundle()
                         bundle.putSerializable("member", members[position])
-                        findNavController().navigate(R.id.action_MembersFragment_to_MemberFormFragment, bundle)
+                        findNavController().navigate(
+                            R.id.action_MembersFragment_to_MemberFormFragment,
+                            bundle
+                        )
                         true
                     }
+
                     R.id.action_delete -> {
                         val alertDialogBuilder = AlertDialog.Builder(requireContext())
                         alertDialogBuilder.setTitle("Deletar")
@@ -164,6 +201,7 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
                         alertDialogBuilder.create().show()
                         true
                     }
+
                     else -> false
                 }
             }
@@ -172,7 +210,7 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
         }
     }
 
-    private fun removeMember(index: Int){
+    private fun removeMember(index: Int) {
         memberRepository.removeMemberByIndex(index)
         onMembersChanged(memberRepository.getAllMembers())
     }

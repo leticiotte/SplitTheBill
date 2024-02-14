@@ -18,6 +18,10 @@
         <action
             android:id="@+id/action_MembersFragment_to_MemberFormFragment"
             app:destination="@id/MemberFormFragment" />
+
+        <action
+            android:id="@+id/action_MembersFragment_SplitBillFragment"
+            app:destination="@id/SplitBillFragment" />
     </fragment>
     <fragment
         android:id="@+id/ItemsFragment"
@@ -53,5 +57,16 @@
         <action
             android:id="@+id/action_ItemFormFragment_to_ItemsFragment"
             app:destination="@id/ItemsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/SplitBillFragment"
+        android:name="com.example.splitthebill.ui.fragment.SplitBillFragment"
+        android:label="@string/item_fragment_label"
+        tools:layout="@layout/fragment_split_bill">
+
+        <action
+            android:id="@+id/action_SplitBillFragment_to_MembersFragment"
+            app:destination="@id/MembersFragment" />
     </fragment>
 </navigation>
