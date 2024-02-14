@@ -1,7 +1,6 @@
 package com.example.splitthebill.ui.fragment
 
 import android.os.Bundle
-import android.view.ContextMenu
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.Menu
@@ -20,7 +19,6 @@ import com.example.splitthebill.domain.model.Member
 import com.example.splitthebill.domain.model.interfaces.MembersObserver
 import com.example.splitthebill.domain.model.interfaces.OnItemClickListener
 import com.example.splitthebill.domain.repository.MemberRepository
-import com.example.splitthebill.ui.adapter.ItemAdapter
 import com.example.splitthebill.ui.adapter.MemberAdapter
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.get
@@ -31,7 +29,6 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
     private val binding get() = _binding!!
     private lateinit var membersRv: RecyclerView
     private lateinit var memberAdapter: MemberAdapter
-
 
     private lateinit var members: MutableList<Member>
     private val memberRepository: MemberRepository = get()
@@ -44,7 +41,7 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
         setupMembersList()
 
         binding.fab.setOnClickListener {
-            findNavController().navigate(R.id.action_MembersFragment_to_AddMemberFragment)
+            findNavController().navigate(R.id.action_MembersFragment_to_MemberFormFragment)
         }
 
         setHasOptionsMenu(true)
@@ -145,7 +142,7 @@ class MembersFragment : Fragment(), MembersObserver, OnItemClickListener {
                     R.id.action_edit -> {
                         val bundle = Bundle()
                         bundle.putSerializable("member", members[position])
-                        findNavController().navigate(R.id.action_MembersFragment_to_AddMemberFragment, bundle)
+                        findNavController().navigate(R.id.action_MembersFragment_to_MemberFormFragment, bundle)
                         true
                     }
                     R.id.action_delete -> {

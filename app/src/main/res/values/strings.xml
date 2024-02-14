@@ -6,7 +6,8 @@
     <!-- Strings used for fragments for navigation -->
     <string name="members_fragment_label">SplitTheBill</string>
     <string name="items_fragment_label">Itens</string>
-    <string name="add_member_label">Adicionar integrante</string>
+    <string name="member_fragment_label">Integrante</string>
+    <string name="item_fragment_label">Item</string>
 
     <string name="next">Next</string>
     <string name="previous">Previous</string>
@@ -14,7 +15,6 @@
     <!-- Strings used for TextView -->
     <string name="members_tv">Integrantes</string>
     <string name="items_tv">Itens</string>
-    <string name="add_member_tv">Adicionar integrante</string>
     <string name="name_tv">Nome</string>
     <string name="has_item_tv">Comprou algo?</string>
     <string name="item_description_tv">Descrição</string>

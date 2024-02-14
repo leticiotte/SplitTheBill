@@ -15,19 +15,22 @@ import com.example.splitthebill.R
 import com.example.splitthebill.databinding.FragmentMemberFormBinding
 import com.example.splitthebill.domain.model.Item
 import com.example.splitthebill.domain.model.Member
+import com.example.splitthebill.domain.model.interfaces.ToolbarConfig
 import com.example.splitthebill.domain.repository.MemberRepository
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.get
 
-class MemberFormFragment : Fragment() {
+class MemberFormFragment : Fragment(), ToolbarConfig {
     private var _binding: FragmentMemberFormBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var addMemberNameEt: EditText
-    private lateinit var addMemberHasItemCb: CheckBox
-    private lateinit var addMemberItemDescriptionEt: EditText
-    private lateinit var addMemberItemValueEt: EditText
+    private lateinit var formMemberNameEt: EditText
+    private lateinit var formMemberHasItemCb: CheckBox
+    private lateinit var formMemberItemDescriptionEt: EditText
+    private lateinit var formMemberItemValueEt: EditText
     private lateinit var saveBtn: Button
+    private lateinit var toolbar: MaterialToolbar
 
     private val memberRepository: MemberRepository = get()
 
@@ -49,22 +52,25 @@ class MemberFormFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        arguments?.let {
-            member = it.getSerializable("member") as Member
-            if (member != null) {
-                isEdit = true
-                addMemberNameEt.text = Editable.Factory.getInstance().newEditable(member.name)
-                if (member.items.size != 0) {
-                    addMemberHasItemCb.isChecked = true
+        findAndLinkToolbar()
+        setupNavigationOnClickListener()
 
-                    addMemberItemDescriptionEt.isEnabled = true
-                    addMemberItemDescriptionEt.background = null
-                    addMemberItemDescriptionEt.text =
+        arguments?.let {
+            if (it.getSerializable("member") != null) {
+                member = it.getSerializable("member") as Member
+                isEdit = true
+                formMemberNameEt.text = Editable.Factory.getInstance().newEditable(member.name)
+                if (member.items.size != 0) {
+                    formMemberHasItemCb.isChecked = true
+
+                    formMemberItemDescriptionEt.isEnabled = true
+                    formMemberItemDescriptionEt.background = null
+                    formMemberItemDescriptionEt.text =
                         Editable.Factory.getInstance().newEditable(member.items[0].description)
 
-                    addMemberItemValueEt.isEnabled = true
-                    addMemberItemValueEt.background = null
-                    addMemberItemValueEt.text =
+                    formMemberItemValueEt.isEnabled = true
+                    formMemberItemValueEt.background = null
+                    formMemberItemValueEt.text =
                         Editable.Factory.getInstance().newEditable(member.items[0].value.toString())
                 }
             }
@@ -76,29 +82,39 @@ class MemberFormFragment : Fragment() {
         _binding = null
     }
 
+    override fun findAndLinkToolbar() {
+        toolbar = requireActivity().findViewById(R.id.toolbar)
+    }
+
+    override fun setupNavigationOnClickListener() {
+        toolbar.setNavigationOnClickListener {
+            findNavController().navigate(R.id.action_MemberFormFragment_to_MembersFragment)
+        }
+    }
+
     private fun setupInputs() {
-        addMemberNameEt = binding.addMemberNameEt
-        addMemberHasItemCb = binding.addMemberHasItemCb
-        addMemberItemDescriptionEt = binding.addMemberItemDescriptionEt
-        addMemberItemValueEt = binding.addMemberItemValueEt
+        formMemberNameEt = binding.formMemberNameEt
+        formMemberHasItemCb = binding.formMemberHasItemCb
+        formMemberItemDescriptionEt = binding.formMemberItemDescriptionEt
+        formMemberItemValueEt = binding.formMemberItemValueEt
         saveBtn = binding.saveBtn
     }
 
     private fun setupHasItemCb() {
-        addMemberHasItemCb.setOnCheckedChangeListener { buttonView, isChecked ->
+        formMemberHasItemCb.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
-                addMemberItemDescriptionEt.isEnabled = true
-                addMemberItemDescriptionEt.background = null
-                addMemberItemValueEt.isEnabled = true
-                addMemberItemValueEt.background = null
+                formMemberItemDescriptionEt.isEnabled = true
+                formMemberItemDescriptionEt.background = null
+                formMemberItemValueEt.isEnabled = true
+                formMemberItemValueEt.background = null
             } else {
-                addMemberItemDescriptionEt.isEnabled = false
-                addMemberItemDescriptionEt.background = ContextCompat.getDrawable(
+                formMemberItemDescriptionEt.isEnabled = false
+                formMemberItemDescriptionEt.background = ContextCompat.getDrawable(
                     binding.root.context,
                     R.drawable.edittext_background_disabled
                 )!!
-                addMemberItemValueEt.isEnabled = false
-                addMemberItemValueEt.background = ContextCompat.getDrawable(
+                formMemberItemValueEt.isEnabled = false
+                formMemberItemValueEt.background = ContextCompat.getDrawable(
                     binding.root.context,
                     R.drawable.edittext_background_disabled
                 )!!
@@ -126,22 +142,22 @@ class MemberFormFragment : Fragment() {
     }
 
     private fun isValidInputs(): Boolean {
-        if (addMemberNameEt.text.toString().isNullOrEmpty()) return false
-        if (addMemberHasItemCb.isChecked) {
-            if (addMemberItemDescriptionEt.text.toString().isNullOrEmpty()) return false
-            if (addMemberItemValueEt.text.toString().isNullOrEmpty()) return false
+        if (formMemberNameEt.text.toString().isNullOrEmpty()) return false
+        if (formMemberHasItemCb.isChecked) {
+            if (formMemberItemDescriptionEt.text.toString().isNullOrEmpty()) return false
+            if (formMemberItemValueEt.text.toString().isNullOrEmpty()) return false
         }
         return true
     }
 
     private fun createMemberWithFormValues() {
         var newMember = Member()
-        newMember.name = addMemberNameEt.text.toString()
-        if (addMemberHasItemCb.isChecked) {
+        newMember.name = formMemberNameEt.text.toString()
+        if (formMemberHasItemCb.isChecked) {
             var item = Item(
                 0,
-                addMemberItemDescriptionEt.text.toString(),
-                addMemberItemValueEt.text.toString().toDouble()
+                formMemberItemDescriptionEt.text.toString(),
+                formMemberItemValueEt.text.toString().toDouble()
             )
             newMember.items.add(item)
             newMember.amountPaid = item.value
@@ -153,18 +169,19 @@ class MemberFormFragment : Fragment() {
             Snackbar.LENGTH_LONG
         )
             .setAction("Action", null).show()
-        findNavController().navigate(R.id.action_AddMemberFragment_to_MembersFragment)
+
+        findNavController().navigate(R.id.action_MemberFormFragment_to_MembersFragment)
     }
 
     private fun editMemberWithFormValues() {
         var newMember = Member()
         newMember.index = member.index
-        newMember.name = addMemberNameEt.text.toString()
-        if (addMemberHasItemCb.isChecked) {
+        newMember.name = formMemberNameEt.text.toString()
+        if (formMemberHasItemCb.isChecked) {
             var item = Item(
                 0,
-                addMemberItemDescriptionEt.text.toString(),
-                addMemberItemValueEt.text.toString().toDouble()
+                formMemberItemDescriptionEt.text.toString(),
+                formMemberItemValueEt.text.toString().toDouble()
             )
             newMember.items.add(item)
             newMember.amountPaid = item.value
@@ -176,6 +193,6 @@ class MemberFormFragment : Fragment() {
             Snackbar.LENGTH_LONG
         )
             .setAction("Action", null).show()
-        findNavController().navigate(R.id.action_AddMemberFragment_to_MembersFragment)
+        findNavController().navigate(R.id.action_MemberFormFragment_to_MembersFragment)
     }
 }

@@ -13,14 +13,11 @@
 
         <action
             android:id="@+id/action_MembersFragment_to_ItemsFragment"
-            app:destination="@id/ItemsFragment">
-        </action>
-
-
+            app:destination="@id/ItemsFragment" />
 
         <action
-            android:id="@+id/action_MembersFragment_to_AddMemberFragment"
-            app:destination="@id/AddMemberFragment" />
+            android:id="@+id/action_MembersFragment_to_MemberFormFragment"
+            app:destination="@id/MemberFormFragment" />
     </fragment>
     <fragment
         android:id="@+id/ItemsFragment"
@@ -29,52 +26,32 @@
         tools:layout="@layout/fragment_items">
 
         <action
+            android:id="@+id/action_ItemsFragment_to_ItemFormFragment"
+            app:destination="@id/ItemFormFragment" />
+
+        <action
             android:id="@+id/action_ItemsFragment_to_MembersFragment"
             app:destination="@id/MembersFragment" />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            app:layout_scrollFlags="scroll|enterAlways">
-
-            <!-- Botão de voltar -->
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@android:drawable/ic_menu_revert" />
-        </com.google.android.material.appbar.MaterialToolbar>
     </fragment>
     <fragment
-        android:id="@+id/AddMemberFragment"
+        android:id="@+id/MemberFormFragment"
         android:name="com.example.splitthebill.ui.fragment.MemberFormFragment"
-        android:label="@string/add_member_label"
+        android:label="@string/member_fragment_label"
         tools:layout="@layout/fragment_member_form">
 
         <action
-            android:id="@+id/action_AddMemberFragment_to_MembersFragment"
+            android:id="@+id/action_MemberFormFragment_to_MembersFragment"
             app:destination="@id/MembersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ItemFormFragment"
+        android:name="com.example.splitthebill.ui.fragment.ItemFormFragment"
+        android:label="@string/item_fragment_label"
+        tools:layout="@layout/fragment_item_form">
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            android:elevation="4dp"
-            app:layout_scrollFlags="scroll|enterAlways">
-
-            <!-- Botão de voltar -->
-            <ImageButton
-                android:id="@+id/btnBack"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@android:drawable/ic_menu_revert" />
-        </com.google.android.material.appbar.MaterialToolbar>
-
+        <action
+            android:id="@+id/action_ItemFormFragment_to_ItemsFragment"
+            app:destination="@id/ItemsFragment" />
     </fragment>
 </navigation>

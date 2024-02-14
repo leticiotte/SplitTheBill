@@ -12,9 +12,8 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <TextView
-                android:id="@+id/formMemberNameTv"
+                android:id="@+id/formItemDescriptionTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -25,54 +24,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/formMemberNameEt"
+                android:id="@+id/formItemDescriptionEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:autofillHints="name"
                 android:ems="10"
-                android:hint="@string/name_hint"
-                android:inputType="text"
-                android:minHeight="48dp"
-                android:textColor="#000000"
-                android:textColorHint="#000000"
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/formMemberNameTv" />
-
-            <CheckBox
-                android:id="@+id/formMemberHasItemCb"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-
-                android:text="@string/has_item_tv"
-
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/formMemberNameEt" />
-
-            <TextView
-                android:id="@+id/formMemberItemDescriptionTv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:text="@string/item_description_tv"
-                android:textSize="16sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/formMemberHasItemCb" />
-
-            <EditText
-                android:id="@+id/formMemberItemDescriptionEt"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:autofillHints="name"
-                android:background="@drawable/edittext_background_disabled"
-                android:ems="10"
-                android:enabled="false"
                 android:hint="@string/item_description_hint"
                 android:inputType="text"
                 android:minHeight="48dp"
@@ -80,28 +38,26 @@
                 android:textColorHint="#000000"
 
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/formMemberItemDescriptionTv" />
+                app:layout_constraintTop_toBottomOf="@+id/formItemDescriptionTv" />
 
             <TextView
-                android:id="@+id/formMemberItemValueTv"
+                android:id="@+id/formItemValueTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:text="@string/item_value_tv"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/formMemberItemDescriptionEt" />
+                app:layout_constraintTop_toBottomOf="@+id/formItemDescriptionEt" />
 
             <EditText
-                android:id="@+id/formMemberItemValueEt"
+                android:id="@+id/formItemValueEt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:autofillHints="name"
-                android:background="@drawable/edittext_background_disabled"
                 android:ems="10"
-                android:enabled="false"
                 android:hint="@string/item_value_hint"
                 android:inputType="numberDecimal"
                 android:minHeight="48dp"
@@ -109,7 +65,7 @@
                 android:textColorHint="#000000"
 
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/formMemberItemValueTv" />
+                app:layout_constraintTop_toBottomOf="@+id/formItemValueTv" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
