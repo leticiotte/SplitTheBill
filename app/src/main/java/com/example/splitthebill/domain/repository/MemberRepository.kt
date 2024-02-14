@@ -12,5 +12,6 @@ interface MemberRepository {
     fun clearAllMembers()
     fun getMemberItems(memberIndex: Int): MutableList<Item>
     fun addMemberItem(memberIndex: Int, item: Item)
+    fun editMemberItem(memberIndex: Int, item: Item)
     fun removeMemberItemByIndex(memberIndex: Int, itemIndex: Int)
 }

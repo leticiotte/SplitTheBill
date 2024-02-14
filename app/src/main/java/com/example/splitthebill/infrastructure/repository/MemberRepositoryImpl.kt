@@ -45,9 +45,16 @@ class MemberRepositoryImpl : MemberRepository {
     override fun addMemberItem(memberIndex: Int, item: Item) {
         item.index = members[memberIndex].items.size
         members[memberIndex].items.add(item)
+        members[memberIndex].amountPaid = members[memberIndex].items.sumOf { it.value }
+    }
+
+    override fun editMemberItem(memberIndex: Int, item: Item) {
+        members[memberIndex].items[item.index!!] = item
+        members[memberIndex].amountPaid = members[memberIndex].items.sumOf { it.value }
     }
 
     override fun removeMemberItemByIndex(memberIndex: Int, itemIndex: Int) {
         members[memberIndex].items.removeAt(itemIndex)
+        members[memberIndex].amountPaid = members[memberIndex].items.sumOf { it.value }
     }
 }
