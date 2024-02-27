@@ -28,6 +28,9 @@ class MemberRepositoryImpl : MemberRepository {
 
     override fun removeMemberByIndex(index: Int) {
         members.removeAt(index)
+        for ((counter, member) in members.withIndex()){
+            member.index = counter
+        }
     }
 
     override fun getMemberByIndex(index: Int): Member {
@@ -56,5 +59,8 @@ class MemberRepositoryImpl : MemberRepository {
     override fun removeMemberItemByIndex(memberIndex: Int, itemIndex: Int) {
         members[memberIndex].items.removeAt(itemIndex)
         members[memberIndex].amountPaid = members[memberIndex].items.sumOf { it.value }
+        for ((counter, item) in members[memberIndex].items.withIndex()){
+            item.index = counter
+        }
     }
 }
